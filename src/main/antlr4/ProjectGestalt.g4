@@ -1,5 +1,9 @@
 grammar ProjectGestalt;
 
+@header {
+package org.example.projectgestaltt.compiler;
+}
+
 // ════════════════════════════════════════
 //   REGLAS DEL PARSER (Sintáctico)
 // ════════════════════════════════════════

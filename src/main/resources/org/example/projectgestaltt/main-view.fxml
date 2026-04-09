@@ -1,141 +1,111 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.example.projectgestaltt.MainController"
-      styleClass="root-container"
-      spacing="0">
+      style="-fx-background-color: #c8b89a;">
 
-    <!-- ══════════════════════════════════════════ -->
-    <!--  BARRA DE TÍTULO                           -->
-    <!-- ══════════════════════════════════════════ -->
-    <HBox styleClass="title-bar" spacing="12" alignment="CENTER_LEFT">
-        <Label text="⚙" styleClass="title-icon"/>
-        <Label text="PROJECT GESTALT — Mini Compilador NieR" styleClass="title-label"/>
+    <!-- Barra de título -->
+    <HBox style="-fx-background-color: #2a2318; -fx-padding: 10 16;"
+          spacing="12" alignment="CENTER_LEFT">
+        <Label text="[ PROJECT GESTALT ] — COMPILADOR NieR"
+               style="-fx-text-fill: #c8b89a; -fx-font-size: 14px;
+                      -fx-font-weight: bold;
+                      -fx-font-family: 'Courier New', monospace;"/>
         <Pane HBox.hgrow="ALWAYS"/>
-        <Label fx:id="lblEstado" text="Listo." styleClass="estado-neutro"/>
+        <Button text="[ ABRIR ]"   onAction="#onAbrir"   styleClass="btn-accion"/>
+        <Button text="[ GUARDAR ]" onAction="#onGuardar" styleClass="btn-accion"/>
     </HBox>
 
-    <!-- ══════════════════════════════════════════ -->
-    <!--  MENÚ DE ACCIONES                          -->
-    <!-- ══════════════════════════════════════════ -->
-    <HBox styleClass="toolbar" spacing="8" alignment="CENTER_LEFT">
-        <padding><Insets top="8" bottom="8" left="12" right="12"/></padding>
+    <!-- Editor y árbol -->
+    <SplitPane VBox.vgrow="ALWAYS" dividerPositions="0.5"
+               style="-fx-background-color: #c8b89a; -fx-padding: 6;">
 
-        <Button text="▶  Compilar"   onAction="#onCompilar"  styleClass="btn-compile"/>
-        <Button text="✦  Ejemplo"    onAction="#onEjemplo"   styleClass="btn-example"/>
-        <Separator orientation="VERTICAL" styleClass="sep"/>
-        <Button text="📂  Abrir"     onAction="#onAbrir"     styleClass="btn-file"/>
-        <Button text="💾  Guardar"   onAction="#onGuardar"   styleClass="btn-file"/>
-        <Separator orientation="VERTICAL" styleClass="sep"/>
-        <Button text="✖  Limpiar"   onAction="#onLimpiar"   styleClass="btn-clear"/>
-    </HBox>
-
-    <!-- ══════════════════════════════════════════ -->
-    <!--  PANEL CENTRAL: EDITOR + ÁRBOL             -->
-    <!-- ══════════════════════════════════════════ -->
-    <SplitPane VBox.vgrow="ALWAYS" dividerPositions="0.52"
-               styleClass="split-main">
-
-        <!-- Editor de código -->
-        <VBox styleClass="panel">
-            <HBox styleClass="panel-header" spacing="8" alignment="CENTER_LEFT">
-                <padding><Insets top="5" bottom="5" left="10" right="10"/></padding>
-                <Label text="✎" styleClass="panel-icon-edit"/>
-                <Label text="Editor de Código" styleClass="panel-title"/>
-            </HBox>
-            <TextArea fx:id="editorCodigo"
-                      VBox.vgrow="ALWAYS"
-                      promptText="// Escribe tu programa Project Gestalt aquí..."
-                      styleClass="code-editor"/>
+        <VBox style="-fx-background-color: #c8b89a; -fx-border-color: #8a7a60; -fx-border-width: 1;">
+            <Label text="// EDITOR DE CÓDIGO" styleClass="panel-titulo"/>
+            <TextArea fx:id="editorCodigo" VBox.vgrow="ALWAYS"/>
         </VBox>
 
-        <!-- Árbol sintáctico -->
-        <VBox styleClass="panel">
-            <HBox styleClass="panel-header" spacing="8" alignment="CENTER_LEFT">
-                <padding><Insets top="5" bottom="5" left="10" right="10"/></padding>
-                <Label text="⊢" styleClass="panel-icon-tree"/>
-                <Label text="Árbol de Derivación" styleClass="panel-title"/>
-            </HBox>
-            <TextArea fx:id="areaArbol"
-                      VBox.vgrow="ALWAYS"
-                      editable="false"
-                      styleClass="tree-area"/>
+        <VBox style="-fx-background-color: #c8b89a; -fx-border-color: #8a7a60; -fx-border-width: 1;">
+            <Label text="// ÁRBOL DE DERIVACIÓN" styleClass="panel-titulo"/>
+            <TextArea fx:id="areaArbol" VBox.vgrow="ALWAYS" editable="false"/>
         </VBox>
 
     </SplitPane>
 
-    <!-- ══════════════════════════════════════════ -->
-    <!--  TABLAS INFERIORES                         -->
-    <!-- ══════════════════════════════════════════ -->
-    <SplitPane prefHeight="240" dividerPositions="0.38, 0.68"
-               styleClass="split-tables">
+    <!-- Barra de botones -->
+    <HBox spacing="10" alignment="CENTER_LEFT"
+          style="-fx-background-color: #2a2318; -fx-padding: 8 14;">
+        <Button text="[ COMPILAR ]" onAction="#onCompilar"
+                style="-fx-background-color: #c8b89a; -fx-text-fill: #2a2318;
+                       -fx-font-weight: bold; -fx-padding: 6 16;
+                       -fx-background-radius: 0;
+                       -fx-font-family: 'Courier New', monospace;"/>
+        <Button text="[ LIMPIAR ]" onAction="#onLimpiar"
+                style="-fx-background-color: #7a2a1a; -fx-text-fill: #c8b89a;
+                       -fx-font-weight: bold; -fx-padding: 6 16;
+                       -fx-background-radius: 0;
+                       -fx-font-family: 'Courier New', monospace;"/>
+        <Button text="[ EJEMPLO ]" onAction="#onEjemplo"
+                style="-fx-background-color: #3d3020; -fx-text-fill: #c8b89a;
+                       -fx-font-weight: bold; -fx-padding: 6 16;
+                       -fx-background-radius: 0;
+                       -fx-font-family: 'Courier New', monospace;"/>
+        <Pane HBox.hgrow="ALWAYS"/>
+        <Label text="STATUS: " style="-fx-text-fill: #c8b89a;
+               -fx-font-family: 'Courier New', monospace; -fx-font-size: 11px;"/>
+        <Label fx:id="lblEstado" text="LISTO" styleClass="estado-neutro"/>
+    </HBox>
 
-        <!-- Tabla de Tokens -->
-        <VBox styleClass="panel">
-            <HBox styleClass="panel-header" spacing="8" alignment="CENTER_LEFT">
-                <padding><Insets top="4" bottom="4" left="10" right="10"/></padding>
-                <Label text="◈" styleClass="panel-icon-token"/>
-                <Label text="Tabla de Tokens" styleClass="panel-title"/>
-            </HBox>
-            <TableView fx:id="tablaTokens" VBox.vgrow="ALWAYS" styleClass="data-table">
+    <!-- Tablas en pestañas -->
+    <TabPane prefHeight="240"
+             style="-fx-background-color: #c8b89a;">
+
+        <Tab text="TOKENS" closable="false">
+            <TableView fx:id="tablaTokens">
                 <columns>
-                    <TableColumn fx:id="colTipoToken"    text="Tipo"    prefWidth="130"/>
-                    <TableColumn fx:id="colValorToken"   text="Valor"   prefWidth="110"/>
-                    <TableColumn fx:id="colLineaToken"   text="Línea"   prefWidth="55"/>
-                    <TableColumn fx:id="colColumnaToken" text="Col"     prefWidth="45"/>
+                    <TableColumn fx:id="colTipoToken"    text="TIPO"    prefWidth="180"/>
+                    <TableColumn fx:id="colValorToken"   text="VALOR"   prefWidth="180"/>
+                    <TableColumn fx:id="colLineaToken"   text="LÍNEA"   prefWidth="70"/>
+                    <TableColumn fx:id="colColumnaToken" text="COL"     prefWidth="70"/>
                 </columns>
                 <columnResizePolicy>
                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
                 </columnResizePolicy>
             </TableView>
-        </VBox>
+        </Tab>
 
-        <!-- Tabla de Errores -->
-        <VBox styleClass="panel">
-            <HBox styleClass="panel-header" spacing="8" alignment="CENTER_LEFT">
-                <padding><Insets top="4" bottom="4" left="10" right="10"/></padding>
-                <Label text="⚠" styleClass="panel-icon-error"/>
-                <Label text="Tabla de Errores" styleClass="panel-title"/>
-            </HBox>
-            <TableView fx:id="tablaErrores" VBox.vgrow="ALWAYS" styleClass="data-table">
+        <Tab text="ERRORES" closable="false">
+            <TableView fx:id="tablaErrores">
                 <columns>
-                    <TableColumn fx:id="colTipoError"  text="Tipo"        prefWidth="90"/>
-                    <TableColumn fx:id="colLineaError" text="Línea"       prefWidth="55"/>
-                    <TableColumn fx:id="colColumnaError" text="Col"       prefWidth="45"/>
-                    <TableColumn fx:id="colDescError"  text="Descripción" prefWidth="250"/>
+                    <TableColumn fx:id="colTipoError"    text="TIPO"        prefWidth="100"/>
+                    <TableColumn fx:id="colLineaError"   text="LÍNEA"       prefWidth="70"/>
+                    <TableColumn fx:id="colColumnaError" text="COL"         prefWidth="70"/>
+                    <TableColumn fx:id="colDescError"    text="DESCRIPCIÓN" prefWidth="400"/>
                 </columns>
                 <columnResizePolicy>
                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
                 </columnResizePolicy>
             </TableView>
-        </VBox>
+        </Tab>
 
-        <!-- Tabla de Símbolos -->
-        <VBox styleClass="panel">
-            <HBox styleClass="panel-header" spacing="8" alignment="CENTER_LEFT">
-                <padding><Insets top="4" bottom="4" left="10" right="10"/></padding>
-                <Label text="◇" styleClass="panel-icon-sym"/>
-                <Label text="Tabla de Símbolos" styleClass="panel-title"/>
-            </HBox>
-            <TableView fx:id="tablaSimbolos" VBox.vgrow="ALWAYS" styleClass="data-table">
+        <Tab text="SÍMBOLOS" closable="false">
+            <TableView fx:id="tablaSimbolos">
                 <columns>
-                    <TableColumn fx:id="colNombreSim" text="Nombre"  prefWidth="100"/>
-                    <TableColumn fx:id="colTipoSim"   text="Tipo"    prefWidth="70"/>
-                    <TableColumn fx:id="colAmbitoSim" text="Ámbito"  prefWidth="80"/>
-                    <TableColumn fx:id="colLineaSim"  text="Línea"   prefWidth="50"/>
-                    <TableColumn fx:id="colValorSim"  text="Valor"   prefWidth="80"/>
+                    <TableColumn fx:id="colNombreSim" text="NOMBRE"  prefWidth="150"/>
+                    <TableColumn fx:id="colTipoSim"   text="TIPO"    prefWidth="100"/>
+                    <TableColumn fx:id="colAmbitoSim" text="ÁMBITO"  prefWidth="120"/>
+                    <TableColumn fx:id="colLineaSim"  text="LÍNEA"   prefWidth="70"/>
+                    <TableColumn fx:id="colValorSim"  text="VALOR"   prefWidth="150"/>
                 </columns>
                 <columnResizePolicy>
                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
                 </columnResizePolicy>
             </TableView>
-        </VBox>
+        </Tab>
 
-    </SplitPane>
+    </TabPane>
 
 </VBox>
