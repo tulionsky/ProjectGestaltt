@@ -1,219 +1,426 @@
 /* ══════════════════════════════════════════
-   Project Gestalt — Estilo NieR Automata
+   Project Gestalt — NieR Automata UI Style
    ══════════════════════════════════════════ */
 
-/* ── Fuente base ── */
 * {
     -fx-font-family: "Courier New", Courier, monospace;
 }
 
-/* ── Fondo general ── */
-.root {
-    -fx-background-color: #c8b89a;
+/* ── Raíz ── */
+.root-container {
+    -fx-background-color: #c8c4a8;
 }
 
-/* ── Barra de título ── */
-.barra-titulo {
-    -fx-background-color: #2a2318;
-    -fx-padding: 8 16;
-}
-
-/* ── Panel títulos de secciones ── */
-.panel-titulo {
-    -fx-background-color: #2a2318;
-    -fx-text-fill: #c8b89a;
-    -fx-font-weight: bold;
-    -fx-font-size: 12px;
-    -fx-padding: 4 10;
-    -fx-max-width: infinity;
-    -fx-font-family: "Courier New", monospace;
-}
-
-/* ── Botones de acción (abrir/guardar) ── */
-.btn-accion {
-    -fx-background-color: #3d3020;
-    -fx-text-fill: #c8b89a;
-    -fx-font-size: 11px;
-    -fx-padding: 4 10;
-    -fx-background-radius: 0;
-    -fx-border-color: #c8b89a;
-    -fx-border-width: 1;
-    -fx-font-family: "Courier New", monospace;
-}
-
-.btn-accion:hover {
-    -fx-background-color: #c8b89a;
-    -fx-text-fill: #2a2318;
-}
-
-/* ── Estados ── */
-.estado-neutro {
-    -fx-text-fill: #4a3f30;
-    -fx-font-size: 12px;
-    -fx-font-family: "Courier New", monospace;
-}
-
-.estado-ok {
-    -fx-text-fill: #3d5a2a;
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
-    -fx-font-family: "Courier New", monospace;
-}
-
-.estado-error {
-    -fx-text-fill: #7a2a1a;
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
-    -fx-font-family: "Courier New", monospace;
-}
-
-/* ── Editor de código ── */
-.text-area {
-    -fx-background-color: #d4c4a8;
-    -fx-text-fill: #1a1a1a;
-    -fx-highlight-fill: #8a7a60;
-    -fx-highlight-text-fill: #1a1a1a;
-    -fx-border-color: #8a7a60;
-    -fx-border-width: 1;
-    -fx-background-radius: 0;
-    -fx-font-family: "Courier New", monospace;
-    -fx-font-size: 13px;
-}
-
-.text-area .content {
-    -fx-background-color: #d4c4a8;
-}
-
-/* ── Árbol de derivación ── */
-#areaArbol {
-    -fx-background-color: #bfad90;
-    -fx-text-fill: #1a1a1a;
-    -fx-highlight-fill: #8a7a60;
-    -fx-highlight-text-fill: #1a1a1a;
-    -fx-font-family: "Courier New", monospace;
-    -fx-font-size: 12px;
-}
-
-#areaArbol .content {
-    -fx-background-color: #bfad90;
-}
-
-/* ── SplitPane ── */
-.split-pane {
-    -fx-background-color: #c8b89a;
+/* ── Barra de navegación ── */
+.nav-bar {
+    -fx-background-color: #2e2a1e;
     -fx-padding: 0;
+    -fx-min-height: 38;
+}
+
+.nav-item {
+    -fx-text-fill: #a09880;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 16;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent #3e3a2e transparent transparent;
+    -fx-border-width: 0 1 0 0;
+}
+
+.nav-item-selected {
+    -fx-text-fill: #2e2a1e;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 16;
+    -fx-background-color: #c8c4a8;
+    -fx-border-color: transparent #3e3a2e transparent transparent;
+    -fx-border-width: 0 1 0 0;
+}
+
+.nav-btn {
+    -fx-background-color: #3e3a2e;
+    -fx-text-fill: #a09880;
+    -fx-font-size: 10px;
+    -fx-padding: 8 12;
+    -fx-background-radius: 0;
+    -fx-border-color: #5a5440;
+    -fx-border-width: 0 0 0 1;
+    -fx-cursor: hand;
+}
+
+.nav-btn:hover {
+    -fx-background-color: #c8c4a8;
+    -fx-text-fill: #2e2a1e;
+}
+
+/* ── Línea de puntos ── */
+.dot-line {
+    -fx-text-fill: #9a9070;
+    -fx-font-size: 10px;
+    -fx-padding: 2 8;
+    -fx-background-color: #b8b49a;
+    -fx-max-width: infinity;
+}
+
+/* ── Encabezado de sección ── */
+.section-header {
+    -fx-padding: 8 16 4 16;
+    -fx-background-color: #c8c4a8;
+}
+
+.section-title {
+    -fx-text-fill: #2e2a1e;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+.section-subtitle {
+    -fx-text-fill: #6a6450;
+    -fx-font-size: 13px;
+    -fx-padding: 6 0 0 0;
+}
+
+/* ── Split principal ── */
+.main-split {
+    -fx-background-color: #c8c4a8;
+    -fx-padding: 4 8;
 }
 
 .split-pane-divider {
-    -fx-background-color: #8a7a60;
-    -fx-padding: 0 1;
+    -fx-background-color: #8a8470;
+    -fx-padding: 0 2;
 }
 
-/* ── Pestañas ── */
-.tab-pane {
-    -fx-background-color: #c8b89a;
-    -fx-tab-min-height: 28;
+/* ── Paneles ── */
+.panel {
+    -fx-background-color: #c8c4a8;
+    -fx-border-color: #6a6450;
+    -fx-border-width: 1;
 }
 
-.tab-pane .tab-header-area .tab-header-background {
-    -fx-background-color: #2a2318;
+.panel-header {
+    -fx-background-color: #3e3a2e;
+    -fx-padding: 5 10;
+    -fx-min-height: 26;
 }
 
-.tab-pane .tab {
-    -fx-background-color: #3d3020;
-    -fx-background-radius: 0;
-    -fx-padding: 4 12;
+.panel-title {
+    -fx-text-fill: #c8c4a8;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
 }
 
-.tab-pane .tab:selected {
-    -fx-background-color: #c8b89a;
+.panel-badge {
+    -fx-text-fill: #7a7860;
+    -fx-font-size: 10px;
+    -fx-background-color: #2e2a1e;
+    -fx-padding: 2 6;
+    -fx-border-color: #5a5440;
+    -fx-border-width: 1;
 }
 
-.tab-pane .tab .tab-label {
-    -fx-text-fill: #c8b89a;
+/* ── Editor de código ── */
+.code-editor {
+    -fx-background-color: #d4d0b4;
+    -fx-text-fill: #1e1a0e;
+    -fx-highlight-fill: #8a8470;
+    -fx-highlight-text-fill: #1e1a0e;
     -fx-font-family: "Courier New", monospace;
+    -fx-font-size: 13px;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+}
+
+.code-editor .content {
+    -fx-background-color: #d4d0b4;
+}
+
+/* ── Árbol de derivación ── */
+.tree-area {
+    -fx-background-color: #bcb89c;
+    -fx-text-fill: #2e2a1e;
+    -fx-highlight-fill: #8a8470;
+    -fx-highlight-text-fill: #2e2a1e;
+    -fx-font-family: "Courier New", monospace;
+    -fx-font-size: 11px;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+}
+
+.tree-area .content {
+    -fx-background-color: #bcb89c;
+}
+
+/* ── Barra de acciones ── */
+.action-bar {
+    -fx-background-color: #2e2a1e;
+    -fx-padding: 8 14;
+}
+
+.btn-compile {
+    -fx-background-color: #c8c4a8;
+    -fx-text-fill: #2e2a1e;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+    -fx-padding: 6 16;
+    -fx-background-radius: 0;
+    -fx-cursor: hand;
+}
+
+.btn-compile:hover {
+    -fx-background-color: #e8e4c8;
+}
+
+.btn-clear {
+    -fx-background-color: #5a2a1e;
+    -fx-text-fill: #c8c4a8;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+    -fx-padding: 6 16;
+    -fx-background-radius: 0;
+    -fx-cursor: hand;
+}
+
+.btn-clear:hover {
+    -fx-background-color: #7a3a2e;
+}
+
+.btn-example {
+    -fx-background-color: #3e3a2e;
+    -fx-text-fill: #c8c4a8;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+    -fx-padding: 6 16;
+    -fx-background-radius: 0;
+    -fx-border-color: #5a5440;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+}
+
+.btn-example:hover {
+    -fx-background-color: #5a5440;
+}
+
+.status-label {
+    -fx-text-fill: #7a7860;
     -fx-font-size: 11px;
 }
 
-.tab-pane .tab:selected .tab-label {
-    -fx-text-fill: #2a2318;
+.status-ok {
+    -fx-text-fill: #c8c4a8;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.status-error {
+    -fx-text-fill: #c87060;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.status-neutro {
+    -fx-text-fill: #a09880;
+    -fx-font-size: 12px;
+}
+
+/* ── Pestañas ── */
+.nier-tabs {
+    -fx-background-color: #c8c4a8;
+    -fx-tab-min-height: 30;
+}
+
+.nier-tabs .tab-header-area .tab-header-background {
+    -fx-background-color: #2e2a1e;
+}
+
+.nier-tabs .tab {
+    -fx-background-color: #3e3a2e;
+    -fx-background-radius: 0;
+    -fx-padding: 4 14;
+    -fx-border-color: transparent #5a5440 transparent transparent;
+    -fx-border-width: 0 1 0 0;
+}
+
+.nier-tabs .tab:selected {
+    -fx-background-color: #c8c4a8;
+}
+
+.nier-tabs .tab .tab-label {
+    -fx-text-fill: #a09880;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.nier-tabs .tab:selected .tab-label {
+    -fx-text-fill: #2e2a1e;
+}
+
+.tab-header {
+    -fx-background-color: #b8b49a;
+    -fx-padding: 4 10;
+    -fx-border-color: #8a8470;
+    -fx-border-width: 0 0 1 0;
+}
+
+.tab-section-title {
+    -fx-text-fill: #4e4a38;
+    -fx-font-size: 11px;
     -fx-font-weight: bold;
 }
 
 /* ── Tablas ── */
-.table-view {
-    -fx-background-color: #d4c4a8;
-    -fx-border-color: #8a7a60;
+.nier-table {
+    -fx-background-color: #d4d0b4;
+    -fx-border-color: #8a8470;
     -fx-border-width: 1;
     -fx-background-radius: 0;
 }
 
-.table-view .column-header-background {
-    -fx-background-color: #2a2318;
+.nier-table .column-header-background {
+    -fx-background-color: #3e3a2e;
 }
 
-.table-view .column-header {
-    -fx-background-color: #2a2318;
-    -fx-border-color: #8a7a60;
+.nier-table .column-header {
+    -fx-background-color: #3e3a2e;
+    -fx-border-color: #5a5440;
     -fx-border-width: 0 1 0 0;
 }
 
-.table-view .column-header .label {
-    -fx-text-fill: #c8b89a;
+.nier-table .column-header .label {
+    -fx-text-fill: #c8c4a8;
     -fx-font-weight: bold;
-    -fx-font-family: "Courier New", monospace;
     -fx-font-size: 11px;
 }
 
-.table-view .table-row-cell {
-    -fx-background-color: #d4c4a8;
-    -fx-border-color: #b0a080;
+.nier-table .table-row-cell {
+    -fx-background-color: #d4d0b4;
+    -fx-border-color: #b8b49a;
     -fx-border-width: 0 0 1 0;
-    -fx-font-family: "Courier New", monospace;
     -fx-font-size: 12px;
 }
 
-.table-view .table-row-cell:odd {
-    -fx-background-color: #c8b89a;
+.nier-table .table-row-cell:odd {
+    -fx-background-color: #c8c4a8;
 }
 
-.table-view .table-row-cell:selected {
-    -fx-background-color: #8a7a60;
+.nier-table .table-row-cell:selected {
+    -fx-background-color: #3e3a2e;
 }
 
-.table-view .table-row-cell .table-cell {
-    -fx-text-fill: #1a1a1a;
-    -fx-border-color: #b0a080;
+.nier-table .table-row-cell .table-cell {
+    -fx-text-fill: #2e2a1e;
+    -fx-border-color: #b8b49a;
     -fx-border-width: 0 1 0 0;
 }
 
-.table-view .table-row-cell:selected .table-cell {
-    -fx-text-fill: #1a1a1a !important;
+.nier-table .table-row-cell:selected .table-cell {
+    -fx-text-fill: #c8c4a8 !important;
 }
 
-.table-view .table-row-cell:focused .table-cell {
-    -fx-text-fill: #1a1a1a !important;
+.nier-table .table-row-cell:focused .table-cell {
+    -fx-text-fill: #2e2a1e !important;
 }
 
-.table-view .table-row-cell:selected:focused .table-cell {
-    -fx-text-fill: #1a1a1a !important;
+.nier-table .table-row-cell:selected:focused .table-cell {
+    -fx-text-fill: #c8c4a8 !important;
 }
 
-.table-view:focused .table-row-cell:selected .table-cell {
-    -fx-text-fill: #1a1a1a !important;
+.nier-table:focused .table-row-cell:selected .table-cell {
+    -fx-text-fill: #c8c4a8 !important;
 }
 
-.table-view .table-row-cell:odd:selected {
-    -fx-background-color: #8a7a60;
+.nier-table .table-row-cell:odd:selected .table-cell {
+    -fx-text-fill: #c8c4a8 !important;
 }
 
-.table-view .table-row-cell:odd:selected .table-cell {
-    -fx-text-fill: #1a1a1a !important;
-}
-
-/* Placeholder de tabla vacía */
-.table-view .placeholder .label {
-    -fx-text-fill: #6a5a40;
-    -fx-font-family: "Courier New", monospace;
+.nier-table .placeholder .label {
+    -fx-text-fill: #8a8470;
     -fx-font-size: 11px;
+}
+
+/* ── Barra inferior ── */
+.bottom-bar {
+    -fx-background-color: #2e2a1e;
+    -fx-padding: 6 14;
+    -fx-border-color: #5a5440;
+    -fx-border-width: 1 0 0 0;
+}
+
+.bottom-hint {
+    -fx-text-fill: #c8c4a8;
+    -fx-font-size: 11px;
+}
+
+.bottom-controls {
+    -fx-text-fill: #7a7860;
+    -fx-font-size: 10px;
+}
+
+.bottom-cursor {
+    -fx-text-fill: #c8c4a8;
+    -fx-font-size: 11px;
+}
+
+/* ── TreeView del árbol sintáctico ── */
+.nier-tree {
+    -fx-background-color: #bcb89c;
+    -fx-border-color: transparent;
+}
+
+.nier-tree .tree-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #2e2a1e;
+    -fx-font-family: "Courier New", monospace;
+    -fx-font-size: 12px;
+    -fx-padding: 2 4;
+}
+
+.nier-tree .tree-cell:selected {
+    -fx-background-color: #3e3a2e;
+    -fx-text-fill: #c8c4a8;
+}
+
+.nier-tree .tree-cell:hover {
+    -fx-background-color: #aca890;
+}
+
+/* Nodos de regla (no terminales) — texto oscuro bold */
+.nier-tree .tree-cell .text {
+    -fx-font-weight: bold;
+}
+
+/* Flecha del árbol */
+.nier-tree .tree-disclosure-node .arrow {
+    -fx-background-color: #6a6450;
+}
+
+.nier-tree:focused .tree-cell:selected .tree-disclosure-node .arrow {
+    -fx-background-color: #c8c4a8;
+}
+
+/* ── ScrollPane del árbol ── */
+.nier-scroll {
+    -fx-background-color: #bcb89c;
+    -fx-background: #bcb89c;
+    -fx-border-color: transparent;
+}
+
+.nier-scroll .viewport {
+    -fx-background-color: #bcb89c;
+}
+
+.nier-scroll .scroll-bar {
+    -fx-background-color: #3e3a2e;
+}
+
+.nier-scroll .scroll-bar .thumb {
+    -fx-background-color: #6a6450;
+    -fx-background-radius: 0;
+}
+
+.tree-pane {
+    -fx-background-color: #bcb89c;
+    -fx-min-width: 400;
+    -fx-min-height: 300;
 }

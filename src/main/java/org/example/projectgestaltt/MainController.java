@@ -2,8 +2,10 @@ package org.example.projectgestaltt;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import org.example.projectgestaltt.compiler.GestaltCompiler;
 import org.example.projectgestaltt.model.*;
@@ -11,18 +13,15 @@ import org.example.projectgestaltt.model.*;
 import java.io.*;
 import java.nio.file.Files;
 
-/**
- * Controlador principal de la interfaz JavaFX.
- * Conecta la vista FXML con el compilador.
- */
 public class MainController {
 
-    // ── Editor de código ────────────────────────────────────────────────────
+    // ── Editor de código ─────────────────────────────────────────────────────
     @FXML private TextArea editorCodigo;
 
-    // ── Panel de resultados ─────────────────────────────────────────────────
-    @FXML private TextArea  areaArbol;
-    @FXML private Label     lblEstado;
+    // ── Panel árbol gráfico ──────────────────────────────────────────────────
+    @FXML private ScrollPane scrollArbol;
+    @FXML private Pane       paneArbol;
+    @FXML private Label      lblEstado;
 
     // ── Tabla de tokens ──────────────────────────────────────────────────────
     @FXML private TableView<TokenInfo>             tablaTokens;
@@ -39,12 +38,12 @@ public class MainController {
     @FXML private TableColumn<ErrorInfo, String>   colDescError;
 
     // ── Tabla de símbolos ────────────────────────────────────────────────────
-    @FXML private TableView<SimboloInfo>           tablaSimbolos;
-    @FXML private TableColumn<SimboloInfo, String> colNombreSim;
-    @FXML private TableColumn<SimboloInfo, String> colTipoSim;
-    @FXML private TableColumn<SimboloInfo, String> colAmbitoSim;
-    @FXML private TableColumn<SimboloInfo, Integer>colLineaSim;
-    @FXML private TableColumn<SimboloInfo, String> colValorSim;
+    @FXML private TableView<SimboloInfo>            tablaSimbolos;
+    @FXML private TableColumn<SimboloInfo, String>  colNombreSim;
+    @FXML private TableColumn<SimboloInfo, String>  colTipoSim;
+    @FXML private TableColumn<SimboloInfo, String>  colAmbitoSim;
+    @FXML private TableColumn<SimboloInfo, Integer> colLineaSim;
+    @FXML private TableColumn<SimboloInfo, String>  colValorSim;
 
     private final GestaltCompiler compiler = new GestaltCompiler();
 
@@ -58,10 +57,10 @@ public class MainController {
         colColumnaToken.setCellValueFactory(new PropertyValueFactory<>("columna"));
 
         // Errores
-        colTipoError .setCellValueFactory(new PropertyValueFactory<>("tipo"));
-        colLineaError.setCellValueFactory(new PropertyValueFactory<>("linea"));
+        colTipoError   .setCellValueFactory(new PropertyValueFactory<>("tipo"));
+        colLineaError  .setCellValueFactory(new PropertyValueFactory<>("linea"));
         colColumnaError.setCellValueFactory(new PropertyValueFactory<>("columna"));
-        colDescError .setCellValueFactory(new PropertyValueFactory<>("descripcion"));
+        colDescError   .setCellValueFactory(new PropertyValueFactory<>("descripcion"));
 
         // Símbolos
         colNombreSim.setCellValueFactory(new PropertyValueFactory<>("nombre"));
@@ -86,25 +85,40 @@ public class MainController {
         CompilerResult resultado = compiler.analizar(codigo);
 
         // Tokens
-        tablaTokens.setItems(FXCollections.observableArrayList(resultado.getTokens()));
+        tablaTokens.setItems(
+                FXCollections.observableArrayList(resultado.getTokens()));
 
         // Errores
-        tablaErrores.setItems(FXCollections.observableArrayList(resultado.getErrores()));
+        tablaErrores.setItems(
+                FXCollections.observableArrayList(resultado.getErrores()));
 
         // Símbolos
-        tablaSimbolos.setItems(FXCollections.observableArrayList(resultado.getSimbolos()));
+        tablaSimbolos.setItems(
+                FXCollections.observableArrayList(resultado.getSimbolos()));
 
-        // Árbol
-        areaArbol.setText(resultado.getArbolDerivacion());
+        // Árbol gráfico
+        if (resultado.getParseTree() != null) {
+            Pane treePane = org.example.projectgestaltt.compiler.TreeVisualizer.draw(
+                    resultado.getParseTree(),
+                    resultado.getParser()
+            );
+            paneArbol.getChildren().clear();
+            paneArbol.getChildren().add(treePane);
+            paneArbol.setPrefSize(
+                    treePane.getPrefWidth(),
+                    treePane.getPrefHeight()
+            );
+        }
 
         // Estado
         if (resultado.isExitoso()) {
-            lblEstado.setText("✔ Compilación exitosa — " + resultado.getTokens().size() + " tokens.");
-            lblEstado.getStyleClass().setAll("estado-ok");
+            lblEstado.setText("NO ERROR — "
+                    + resultado.getTokens().size() + " TOKENS");
+            lblEstado.getStyleClass().setAll("status-ok");
         } else {
             int nErr = resultado.getErrores().size();
-            lblEstado.setText("✖ " + nErr + " error(es) encontrado(s).");
-            lblEstado.getStyleClass().setAll("estado-error");
+            lblEstado.setText(nErr + " ERROR(S) FOUND");
+            lblEstado.getStyleClass().setAll("status-error");
         }
     }
 
@@ -112,12 +126,12 @@ public class MainController {
     @FXML
     private void onLimpiar() {
         editorCodigo.clear();
-        areaArbol.clear();
+        paneArbol.getChildren().clear();
         tablaTokens.getItems().clear();
         tablaErrores.getItems().clear();
         tablaSimbolos.getItems().clear();
-        lblEstado.setText("Listo.");
-        lblEstado.getStyleClass().setAll("estado-neutro");
+        lblEstado.setText("NO ERROR");
+        lblEstado.getStyleClass().setAll("status-ok");
     }
 
     // ── Acción: Abrir archivo ────────────────────────────────────────────────
@@ -126,12 +140,12 @@ public class MainController {
         FileChooser fc = new FileChooser();
         fc.setTitle("Abrir archivo Gestalt");
         fc.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Archivos Gestalt", "*.gt", "*.gestalt", "*.txt"));
+                new FileChooser.ExtensionFilter(
+                        "Archivos Gestalt", "*.gt", "*.gestalt", "*.txt"));
         File f = fc.showOpenDialog(editorCodigo.getScene().getWindow());
         if (f != null) {
             try {
-                String contenido = Files.readString(f.toPath());
-                editorCodigo.setText(contenido);
+                editorCodigo.setText(Files.readString(f.toPath()));
             } catch (IOException e) {
                 mostrarAlerta("Error al leer archivo", e.getMessage());
             }
@@ -174,38 +188,31 @@ public class MainController {
         return """
                 gestalt MiPrograma engage
 
-                    // Declaración de variables
                     pod x := 10;
                     faith pi := 3.14;
                     pascal nombre := "2B";
                     nier activo := true;
 
-                    // Arreglo
                     yorha pod numeros[5];
 
-                    // Condicional
                     directive (x > 5) engage
                         report(x);
                     disengage otherwise engage
                         report(0);
                     disengage
 
-                    // Ciclo mission (while)
                     mission (x > 0) engage
                         x := x - 1;
                     disengage
 
-                    // Ciclo sortie (for)
                     sortie (pod i := 0; i < 5; i := i + 1) engage
                         report(i);
                     disengage
 
-                    // Función
                     model sumar(pod a, pod b) engage
                         glory a + b;
                     disengage
 
-                    // Llamada a función
                     sumar(3, 7);
 
                 disengage replicant
