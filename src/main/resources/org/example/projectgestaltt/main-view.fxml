@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
 
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
@@ -32,43 +31,24 @@
         <Label text=" — Project Gestalt Language" styleClass="section-subtitle"/>
     </HBox>
 
-    <!-- Contenido principal -->
-    <SplitPane VBox.vgrow="ALWAYS" dividerPositions="0.5"
-               styleClass="main-split">
-
-        <!-- Panel Editor -->
-        <VBox styleClass="panel">
-            <HBox styleClass="panel-header" alignment="CENTER_LEFT">
-                <Label text="// SOURCE CODE" styleClass="panel-title"/>
-                <Pane HBox.hgrow="ALWAYS"/>
-                <Label text="INPUT" styleClass="panel-badge"/>
-            </HBox>
-            <TextArea fx:id="editorCodigo" VBox.vgrow="ALWAYS"
-                      styleClass="code-editor"
-                      promptText="gestalt MiPrograma engage&#10;    // escribe aquí&#10;disengage replicant"/>
-        </VBox>
-
-        <!-- Panel Árbol -->
-        <VBox styleClass="panel">
-            <HBox styleClass="panel-header" alignment="CENTER_LEFT">
-                <Label text="// PARSE TREE" styleClass="panel-title"/>
-                <Pane HBox.hgrow="ALWAYS"/>
-                <Label text="OUTPUT" styleClass="panel-badge"/>
-            </HBox>
-            <ScrollPane fx:id="scrollArbol" VBox.vgrow="ALWAYS"
-                        fitToWidth="false" fitToHeight="false"
-                        styleClass="nier-scroll">
-                <Pane fx:id="paneArbol" styleClass="tree-pane"/>
-            </ScrollPane>
-        </VBox>
-
-    </SplitPane>
+    <!-- Editor de código ocupa todo el espacio -->
+    <VBox VBox.vgrow="ALWAYS" styleClass="panel">
+        <HBox styleClass="panel-header" alignment="CENTER_LEFT">
+            <Label text="// SOURCE CODE" styleClass="panel-title"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Label text="INPUT" styleClass="panel-badge"/>
+        </HBox>
+        <TextArea fx:id="editorCodigo" VBox.vgrow="ALWAYS"
+                  styleClass="code-editor"
+                  promptText="gestalt MiPrograma engage&#10;    // escribe aquí&#10;disengage replicant"/>
+    </VBox>
 
     <!-- Barra de acciones -->
     <HBox styleClass="action-bar" spacing="8" alignment="CENTER_LEFT">
-        <Button text="[ COMPILE ]" onAction="#onCompilar" styleClass="btn-compile"/>
-        <Button text="[ CLEAR ]"   onAction="#onLimpiar"  styleClass="btn-clear"/>
-        <Button text="[ EXAMPLE ]" onAction="#onEjemplo"  styleClass="btn-example"/>
+        <Button text="[ COMPILE ]"    onAction="#onCompilar"   styleClass="btn-compile"/>
+        <Button text="[ CLEAR ]"      onAction="#onLimpiar"    styleClass="btn-clear"/>
+        <Button text="[ EXAMPLE ]"    onAction="#onEjemplo"    styleClass="btn-example"/>
+        <Button text="[ PARSE TREE ]" onAction="#onVerArbol"   styleClass="btn-tree"/>
         <Pane HBox.hgrow="ALWAYS"/>
         <Label text="STATUS :" styleClass="status-label"/>
         <Label fx:id="lblEstado" text="NO ERROR" styleClass="status-ok"/>
@@ -79,7 +59,7 @@
            styleClass="dot-line"/>
 
     <!-- Tablas en pestañas -->
-    <TabPane fx:id="tabPane" prefHeight="260" styleClass="nier-tabs">
+    <TabPane fx:id="tabPane" prefHeight="280" styleClass="nier-tabs">
 
         <Tab text="❖ TOKENS" closable="false">
             <VBox>

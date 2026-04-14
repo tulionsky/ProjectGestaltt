@@ -2,12 +2,17 @@ package org.example.projectgestaltt;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.canvas.Canvas;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import org.antlr.v4.runtime.Parser;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.example.projectgestaltt.compiler.GestaltCompiler;
+import org.example.projectgestaltt.compiler.TreeVisualizer;
 import org.example.projectgestaltt.model.*;
 
 import java.io.*;
@@ -18,10 +23,8 @@ public class MainController {
     // ── Editor de código ─────────────────────────────────────────────────────
     @FXML private TextArea editorCodigo;
 
-    // ── Panel árbol gráfico ──────────────────────────────────────────────────
-    @FXML private ScrollPane scrollArbol;
-    @FXML private Pane       paneArbol;
-    @FXML private Label      lblEstado;
+    // ── Estado ───────────────────────────────────────────────────────────────
+    @FXML private Label lblEstado;
 
     // ── Tabla de tokens ──────────────────────────────────────────────────────
     @FXML private TableView<TokenInfo>             tablaTokens;
@@ -44,6 +47,10 @@ public class MainController {
     @FXML private TableColumn<SimboloInfo, String>  colAmbitoSim;
     @FXML private TableColumn<SimboloInfo, Integer> colLineaSim;
     @FXML private TableColumn<SimboloInfo, String>  colValorSim;
+
+    // ── Árbol guardado ───────────────────────────────────────────────────────
+    private ParseTree lastParseTree = null;
+    private Parser    lastParser    = null;
 
     private final GestaltCompiler compiler = new GestaltCompiler();
 
@@ -96,19 +103,9 @@ public class MainController {
         tablaSimbolos.setItems(
                 FXCollections.observableArrayList(resultado.getSimbolos()));
 
-        // Árbol gráfico
-        if (resultado.getParseTree() != null) {
-            Pane treePane = org.example.projectgestaltt.compiler.TreeVisualizer.draw(
-                    resultado.getParseTree(),
-                    resultado.getParser()
-            );
-            paneArbol.getChildren().clear();
-            paneArbol.getChildren().add(treePane);
-            paneArbol.setPrefSize(
-                    treePane.getPrefWidth(),
-                    treePane.getPrefHeight()
-            );
-        }
+        // Guardar árbol para mostrar después
+        lastParseTree = resultado.getParseTree();
+        lastParser    = resultado.getParser();
 
         // Estado
         if (resultado.isExitoso()) {
@@ -122,14 +119,68 @@ public class MainController {
         }
     }
 
+    // ── Acción: Ver árbol en ventana nueva ───────────────────────────────────
+    @FXML
+    private void onVerArbol() {
+        if (lastParseTree == null) {
+            mostrarAlerta("Sin árbol",
+                    "Primero debes compilar un programa.");
+            return;
+        }
+
+        // Crear el árbol gráfico
+        Pane treePane = TreeVisualizer.draw(lastParseTree, lastParser);
+
+        // ScrollPane para hacer scroll
+        ScrollPane scroll = new ScrollPane(treePane);
+        scroll.setStyle(
+                "-fx-background-color: #bcb89c; -fx-background: #bcb89c;");
+        scroll.setPrefSize(1100, 700);
+        scroll.setFitToWidth(false);
+        scroll.setFitToHeight(false);
+
+        // Header
+        HBox header = new HBox();
+        header.setStyle("-fx-background-color: #2e2a1e; -fx-padding: 10 16;");
+        Label titulo = new Label("❖ PARSE TREE — Project Gestalt");
+        titulo.setStyle(
+                "-fx-text-fill: #c8c4a8; -fx-font-weight: bold; " +
+                        "-fx-font-size: 13px; -fx-font-family: 'Courier New';");
+        header.getChildren().add(titulo);
+
+        // Línea decorativa
+        Label dotLine = new Label(
+                "· · · · · · · · · · · · · · · · · · · · · · · · · · · · · " +
+                        "· · · · · · · · · · · · · · · · · · · · · · · · · · · · · ·");
+        dotLine.setMaxWidth(Double.MAX_VALUE);
+        dotLine.setStyle(
+                "-fx-text-fill: #9a9070; -fx-font-size: 10px; " +
+                        "-fx-padding: 2 8; -fx-background-color: #b8b49a;");
+
+        // Layout
+        VBox layout = new VBox(0, header, dotLine, scroll);
+        layout.setStyle("-fx-background-color: #bcb89c;");
+        VBox.setVgrow(scroll, Priority.ALWAYS);
+
+        // Ventana nueva
+        Stage stage = new Stage();
+        stage.setTitle("Parse Tree — Project Gestalt");
+        stage.initModality(Modality.NONE);
+        stage.setScene(new Scene(layout));
+        stage.setMinWidth(800);
+        stage.setMinHeight(500);
+        stage.show();
+    }
+
     // ── Acción: Limpiar ──────────────────────────────────────────────────────
     @FXML
     private void onLimpiar() {
         editorCodigo.clear();
-        paneArbol.getChildren().clear();
         tablaTokens.getItems().clear();
         tablaErrores.getItems().clear();
         tablaSimbolos.getItems().clear();
+        lastParseTree = null;
+        lastParser    = null;
         lblEstado.setText("NO ERROR");
         lblEstado.getStyleClass().setAll("status-ok");
     }

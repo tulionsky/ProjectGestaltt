@@ -424,3 +424,16 @@
     -fx-min-width: 400;
     -fx-min-height: 300;
 }
+.btn-tree {
+    -fx-background-color: #4a6a3a;
+    -fx-text-fill: #c8c4a8;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+    -fx-padding: 6 16;
+    -fx-background-radius: 0;
+    -fx-cursor: hand;
+}
+
+.btn-tree:hover {
+    -fx-background-color: #5a7a4a;
+}
