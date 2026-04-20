@@ -4,11 +4,6 @@ grammar ProjectGestalt;
 package org.example.projectgestaltt.compiler;
 }
 
-// ════════════════════════════════════════
-//   REGLAS DEL PARSER (Sintáctico)
-// ════════════════════════════════════════
-
-// Programa principal
 programa
     : 'gestalt' IDENTIFICADOR 'engage' sentencia* 'disengage' 'replicant'
     ;
