@@ -437,3 +437,69 @@
 .btn-tree:hover {
     -fx-background-color: #5a7a4a;
 }
+
+/* ── Alerta NieR ── */
+.alert-root {
+    -fx-background-color: #c8c4a8;
+}
+
+.alert-header {
+    -fx-background-color: #2e2a1e;
+    -fx-padding: 10 16;
+}
+
+.alert-titulo {
+    -fx-text-fill: #c8c4a8;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-font-family: "Courier New", monospace;
+}
+
+.alert-dot-line {
+    -fx-text-fill: #9a9070;
+    -fx-font-size: 10px;
+    -fx-padding: 2 8;
+    -fx-background-color: #b8b49a;
+    -fx-max-width: infinity;
+}
+
+.alert-body {
+    -fx-background-color: #c8c4a8;
+    -fx-padding: 20 24;
+}
+
+.alert-mensaje {
+    -fx-text-fill: #2e2a1e;
+    -fx-font-size: 12px;
+    -fx-font-family: "Courier New", monospace;
+    -fx-wrap-text: true;
+}
+
+.alert-btn {
+    -fx-background-color: #3e3a2e;
+    -fx-text-fill: #c8c4a8;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+    -fx-padding: 6 20;
+    -fx-background-radius: 0;
+    -fx-font-family: "Courier New", monospace;
+    -fx-cursor: hand;
+}
+
+.alert-btn:hover {
+    -fx-background-color: #c8c4a8;
+    -fx-text-fill: #2e2a1e;
+}
+
+.alert-bottom {
+    -fx-background-color: #2e2a1e;
+    -fx-padding: 6 14;
+    -fx-border-color: #5a5440;
+    -fx-border-width: 1 0 0 0;
+}
+
+.alert-bottom-hint {
+    -fx-text-fill: #7a7860;
+    -fx-font-size: 10px;
+    -fx-font-family: "Courier New", monospace;
+}

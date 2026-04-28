@@ -51,6 +51,7 @@ public class MainController {
     // ── Árbol guardado ───────────────────────────────────────────────────────
     private ParseTree lastParseTree = null;
     private Parser    lastParser    = null;
+    private boolean lastNoFunca =  false;
 
     private final GestaltCompiler compiler = new GestaltCompiler();
 
@@ -106,6 +107,7 @@ public class MainController {
         // Guardar árbol para mostrar después
         lastParseTree = resultado.getParseTree();
         lastParser    = resultado.getParser();
+        lastNoFunca = !resultado.isExitoso();
 
         // Estado
         if (resultado.isExitoso()) {
@@ -125,6 +127,13 @@ public class MainController {
         if (lastParseTree == null) {
             mostrarAlerta("Sin árbol",
                     "Primero debes compilar un programa.");
+            return;
+        }
+
+        if (lastNoFunca) {
+            mostrarAlerta("Errores encontrados",
+                    "No se puede mostrar el árbol porque el programa contiene errores.\n" +
+                            "Corrija los errores y vuelva a compilar.");
             return;
         }
 
@@ -181,6 +190,7 @@ public class MainController {
         tablaSimbolos.getItems().clear();
         lastParseTree = null;
         lastParser    = null;
+        lastNoFunca = false;
         lblEstado.setText("NO ERROR");
         lblEstado.getStyleClass().setAll("status-ok");
     }
@@ -229,10 +239,59 @@ public class MainController {
 
     // ── Helpers ──────────────────────────────────────────────────────────────
     private void mostrarAlerta(String titulo, String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(titulo);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
+        Stage alertStage = new Stage();
+        alertStage.initModality(Modality.APPLICATION_MODAL);
+        alertStage.setTitle(titulo);
+        alertStage.setResizable(false);
+
+        // Header
+        HBox header = new HBox();
+        header.getStyleClass().add("alert-header");
+        Label lblTitulo = new Label("❖ " + titulo.toUpperCase());
+        lblTitulo.getStyleClass().add("alert-titulo");
+        header.getChildren().add(lblTitulo);
+
+        // Línea de puntos
+        Label dotLine = new Label(
+                "· · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · ·");
+        dotLine.setMaxWidth(Double.MAX_VALUE);
+        dotLine.getStyleClass().add("alert-dot-line");
+
+        // Cuerpo
+        VBox body = new VBox(12);
+        body.getStyleClass().add("alert-body");
+        body.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+
+        Label lblMensaje = new Label(mensaje);
+        lblMensaje.getStyleClass().add("alert-mensaje");
+        lblMensaje.setMaxWidth(360);
+        lblMensaje.setWrapText(true);
+
+        Button btnCerrar = new Button("[ OK ]");
+        btnCerrar.getStyleClass().add("alert-btn");
+        btnCerrar.setOnAction(e -> alertStage.close());
+
+        body.getChildren().addAll(lblMensaje, btnCerrar);
+
+        // Barra inferior
+        HBox bottomBar = new HBox();
+        bottomBar.getStyleClass().add("alert-bottom");
+        Label hint = new Label("❖ Press OK to continue");
+        hint.getStyleClass().add("alert-bottom-hint");
+        bottomBar.getChildren().add(hint);
+
+        // Layout
+        VBox layout = new VBox(0, header, dotLine, body, bottomBar);
+        layout.getStyleClass().add("alert-root");
+
+        Scene scene = new Scene(layout);
+        scene.getStylesheets().add(
+                getClass().getResource("/org/example/projectgestaltt/style.css")
+                        .toExternalForm());
+
+        alertStage.setScene(scene);
+        alertStage.setMinWidth(420);
+        alertStage.showAndWait();
     }
 
     private String codigoEjemplo() {
