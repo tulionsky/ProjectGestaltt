@@ -175,6 +175,9 @@ public class MainController {
         Stage stage = new Stage();
         stage.setTitle("Parse Tree — Project Gestalt");
         stage.initModality(Modality.NONE);
+        javafx.scene.image.Image icono = new javafx.scene.image.Image(
+                getClass().getResourceAsStream("/org/example/projectgestaltt/icon.png"));
+        stage.getIcons().add(icono);
         stage.setScene(new Scene(layout));
         stage.setMinWidth(800);
         stage.setMinHeight(500);
@@ -243,6 +246,9 @@ public class MainController {
         alertStage.initModality(Modality.APPLICATION_MODAL);
         alertStage.setTitle(titulo);
         alertStage.setResizable(false);
+        javafx.scene.image.Image icono = new javafx.scene.image.Image(
+                getClass().getResourceAsStream("/org/example/projectgestaltt/icon.png"));
+        alertStage.getIcons().add(icono);
 
         // Header
         HBox header = new HBox();
@@ -298,10 +304,10 @@ public class MainController {
         return """
                 gestalt MiPrograma engage
 
-                    pod x := 10;
-                    faith pi := 3.14;
-                    pascal nombre := "2B";
-                    nier activo := true;
+                    unit pod x := 10;
+                    unit faith pi := 3.14;
+                    unit pascal nombre := "2B";
+                    unit nier activo := true;
 
                     yorha pod numeros[5];
 
@@ -315,7 +321,7 @@ public class MainController {
                         x := x - 1;
                     disengage
 
-                    sortie (pod i := 0; i < 5; i := i + 1) engage
+                    sortie (unit pod i := 0; i < 5; i := i + 1) engage
                         report(i);
                     disengage
 

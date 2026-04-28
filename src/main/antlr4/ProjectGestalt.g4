@@ -26,8 +26,9 @@ sentencia
 
 // unit pod x := 5;
 declaracionVariable
-    : tipo IDENTIFICADOR ':=' expresion ';'
+    : 'unit' tipo IDENTIFICADOR ':=' expresion ';'
     ;
+
 
 // yorha pascal nombres[5];
 declaracionArreglo

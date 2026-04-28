@@ -28,7 +28,7 @@ public class SymbolTableVisitor extends ProjectGestaltBaseVisitor<Void> {
         return visitChildren(ctx);
     }
 
-    // ── Declaración de variable: tipo ID ':=' expr ';' ──────────────────────
+    // ── Declaración de variable: ´unit´ tipo ID ':=' expr ';' ──────────────────────
     @Override
     public Void visitDeclaracionVariable(ProjectGestaltParser.DeclaracionVariableContext ctx) {
         String tipo   = ctx.tipo().getText();
