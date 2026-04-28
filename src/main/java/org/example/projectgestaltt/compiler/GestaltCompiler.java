@@ -45,9 +45,6 @@ public class GestaltCompiler {
 
         ParseTree tree = parser.programa();
 
-        // ── Árbol texto ───────────────────────────────────────────────────
-        arbol = TreePrinter.print(tree, parser);
-
         // ── Tabla de símbolos ─────────────────────────────────────────────
         if (errores.stream().noneMatch(e ->
                 e.getTipo() == ErrorInfo.TipoError.SINTACTICO)) {
