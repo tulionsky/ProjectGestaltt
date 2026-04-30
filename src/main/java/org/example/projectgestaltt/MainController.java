@@ -140,13 +140,49 @@ public class MainController {
         // Crear el árbol gráfico
         Pane treePane = TreeVisualizer.draw(lastParseTree, lastParser);
 
-        // ScrollPane para hacer scroll
-        ScrollPane scroll = new ScrollPane(treePane);
-        scroll.setStyle(
-                "-fx-background-color: #bcb89c; -fx-background: #bcb89c;");
+        // ── Contenedor con escala para zoom ──
+        javafx.scene.layout.StackPane zoomPane =
+                new javafx.scene.layout.StackPane(treePane);
+        zoomPane.setStyle("-fx-background-color: #bcb89c;");
+        zoomPane.setAlignment(javafx.geometry.Pos.TOP_LEFT);
+        zoomPane.setPrefSize(treePane.getPrefWidth(), treePane.getPrefHeight());
+
+        // ── ScrollPane ──
+        ScrollPane scroll = new ScrollPane(zoomPane);
+        scroll.setStyle("-fx-background-color: #bcb89c; -fx-background: #bcb89c;");
         scroll.setPrefSize(1100, 700);
         scroll.setFitToWidth(false);
         scroll.setFitToHeight(false);
+        scroll.setPannable(true); // permite arrastrar con el mouse
+
+        // ── Zoom con rueda del mouse ──
+        final double ZOOM_FACTOR = 0.1;
+        final double MIN_ZOOM    = 0.2;
+        final double MAX_ZOOM    = 3.0;
+        final double[] escala    = {1.0};
+
+        scroll.addEventFilter(javafx.scene.input.ScrollEvent.SCROLL, event -> {
+            if (event.isControlDown() || true) {
+                double delta = event.getDeltaY() > 0
+                        ? (1 + ZOOM_FACTOR)
+                        : (1 - ZOOM_FACTOR);
+
+                double nuevaEscala = escala[0] * delta;
+                nuevaEscala = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, nuevaEscala));
+                escala[0]   = nuevaEscala;
+
+                treePane.setScaleX(nuevaEscala);
+                treePane.setScaleY(nuevaEscala);
+
+                // Ajustar tamaño del contenedor para que el scroll funcione bien
+                zoomPane.setPrefSize(
+                        treePane.getPrefWidth()  * nuevaEscala,
+                        treePane.getPrefHeight() * nuevaEscala
+                );
+
+                event.consume();
+            }
+        });
 
         // Header
         HBox header = new HBox();
@@ -155,7 +191,73 @@ public class MainController {
         titulo.setStyle(
                 "-fx-text-fill: #c8c4a8; -fx-font-weight: bold; " +
                         "-fx-font-size: 13px; -fx-font-family: 'Courier New';");
-        header.getChildren().add(titulo);
+
+        // Indicador de zoom
+        Label lblZoom = new Label("ZOOM: 100%");
+        lblZoom.setStyle(
+                "-fx-text-fill: #7a7860; -fx-font-size: 10px; " +
+                        "-fx-font-family: 'Courier New';");
+
+        // Actualizar label de zoom
+        scroll.addEventFilter(javafx.scene.input.ScrollEvent.SCROLL, event -> {
+            lblZoom.setText("ZOOM: " + (int)(escala[0] * 100) + "%");
+        });
+
+        Pane spacer = new Pane();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        // Botones de zoom
+        Button btnZoomIn = new Button("[ + ]");
+        btnZoomIn.setStyle(
+                "-fx-background-color: #3e3a2e; -fx-text-fill: #c8c4a8; " +
+                        "-fx-font-size: 11px; -fx-padding: 3 10; -fx-background-radius: 0; " +
+                        "-fx-font-family: 'Courier New'; -fx-cursor: hand;");
+        btnZoomIn.setOnAction(e -> {
+            double nueva = Math.min(escala[0] + ZOOM_FACTOR, MAX_ZOOM);
+            escala[0] = nueva;
+            treePane.setScaleX(nueva);
+            treePane.setScaleY(nueva);
+            zoomPane.setPrefSize(
+                    treePane.getPrefWidth()  * nueva,
+                    treePane.getPrefHeight() * nueva);
+            lblZoom.setText("ZOOM: " + (int)(nueva * 100) + "%");
+        });
+
+        Button btnZoomOut = new Button("[ - ]");
+        btnZoomOut.setStyle(
+                "-fx-background-color: #3e3a2e; -fx-text-fill: #c8c4a8; " +
+                        "-fx-font-size: 11px; -fx-padding: 3 10; -fx-background-radius: 0; " +
+                        "-fx-font-family: 'Courier New'; -fx-cursor: hand;");
+        btnZoomOut.setOnAction(e -> {
+            double nueva = Math.max(escala[0] - ZOOM_FACTOR, MIN_ZOOM);
+            escala[0] = nueva;
+            treePane.setScaleX(nueva);
+            treePane.setScaleY(nueva);
+            zoomPane.setPrefSize(
+                    treePane.getPrefWidth()  * nueva,
+                    treePane.getPrefHeight() * nueva);
+            lblZoom.setText("ZOOM: " + (int)(nueva * 100) + "%");
+        });
+
+        Button btnReset = new Button("[ RESET ]");
+        btnReset.setStyle(
+                "-fx-background-color: #3e3a2e; -fx-text-fill: #c8c4a8; " +
+                        "-fx-font-size: 11px; -fx-padding: 3 10; -fx-background-radius: 0; " +
+                        "-fx-font-family: 'Courier New'; -fx-cursor: hand;");
+        btnReset.setOnAction(e -> {
+            escala[0] = 1.0;
+            treePane.setScaleX(1.0);
+            treePane.setScaleY(1.0);
+            zoomPane.setPrefSize(
+                    treePane.getPrefWidth(),
+                    treePane.getPrefHeight());
+            lblZoom.setText("ZOOM: 100%");
+        });
+
+        header.getChildren().addAll(
+                titulo, spacer, lblZoom, btnZoomOut, btnZoomIn, btnReset);
+        header.setSpacing(8);
+        header.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
 
         // Línea decorativa
         Label dotLine = new Label(
@@ -166,18 +268,25 @@ public class MainController {
                 "-fx-text-fill: #9a9070; -fx-font-size: 10px; " +
                         "-fx-padding: 2 8; -fx-background-color: #b8b49a;");
 
+        // Barra inferior con instrucciones
+        HBox bottomBar = new HBox();
+        bottomBar.setStyle("-fx-background-color: #2e2a1e; -fx-padding: 6 14;");
+        Label hint = new Label(
+                "❖ Scroll para zoom   ❖ Click + arrastrar para mover");
+        hint.setStyle(
+                "-fx-text-fill: #7a7860; -fx-font-size: 10px; " +
+                        "-fx-font-family: 'Courier New';");
+        bottomBar.getChildren().add(hint);
+
         // Layout
-        VBox layout = new VBox(0, header, dotLine, scroll);
+        VBox layout = new VBox(0, header, dotLine, scroll, bottomBar);
         layout.setStyle("-fx-background-color: #bcb89c;");
         VBox.setVgrow(scroll, Priority.ALWAYS);
 
-        // Ventana nueva
+        // Ventana
         Stage stage = new Stage();
         stage.setTitle("Parse Tree — Project Gestalt");
         stage.initModality(Modality.NONE);
-        javafx.scene.image.Image icono = new javafx.scene.image.Image(
-                getClass().getResourceAsStream("/org/example/projectgestaltt/icon.png"));
-        stage.getIcons().add(icono);
         stage.setScene(new Scene(layout));
         stage.setMinWidth(800);
         stage.setMinHeight(500);
